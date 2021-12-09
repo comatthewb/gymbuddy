@@ -48,6 +48,24 @@ export function App() {
                 <Input value={exercise.weight} onChange={onChange} label="Weight" id="weight" type="number" />
                 <input type="submit" value="Save Exercise" />
             </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {exercises.map((exercise) => {
+                        return (
+                            <tr>
+                                <td>{exercise.exercise} </td>
+                                <td>{exercise.weight}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
         </>
     );
 }
