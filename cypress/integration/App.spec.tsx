@@ -15,6 +15,10 @@ it("should support adding an exercise", () => {
     cy.findByLabelText("Exercise").should("have.value", "");
     cy.findByText("Hula hoop");
     cy.findByText("5");
+
+    //The validation messages shold no longer display
+    cy.findByText("Please enter a name for the exercise.").should("not.exist");
+    cy.findByText("Please enter a weight for the exercise.").should("not.exist");
 });
 
 it("should validate onBlur", () => {
@@ -23,7 +27,9 @@ it("should validate onBlur", () => {
     //Initially, no validation errors should display
     cy.findByText("Please enter a name for the exercise.").should("not.exist");
     cy.findAllByLabelText("Exercise").focus().blur();
+    cy.findAllByLabelText("Weight").focus().blur();
 
     //Now, validation error message should display
     cy.findByText("Please enter a name for the exercise.");
+    cy.findByText("Please enter a weight for the exercise.");
 });
