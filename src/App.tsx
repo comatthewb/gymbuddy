@@ -1,5 +1,5 @@
 import { Input } from "./reusable/Input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 type NewExercise = {
     type: string;
@@ -8,8 +8,13 @@ type NewExercise = {
 
 type Exercise = {
     id: number;
-    type: string;
+    exercise: string;
     weight: string;
+};
+
+type Errors = {
+    type?: string;
+    weight?: string;
 };
 
 const newExercise: NewExercise = {
@@ -21,6 +26,10 @@ export function App() {
     const [exercise, setExercise] = useState(newExercise);
     const [exercises, setExercises] = useState<Exercise[]>([]);
 
+    //Derived state
+    const errors = validate();
+    const formIsValid = Object.keys(errors).length === 0;
+
     function onChange(event: ChangeEvent<HTMLInputElement>) {
         setExercise({
             ...exercise,
@@ -28,23 +37,35 @@ export function App() {
         });
     }
 
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        setExercises([
+            ...exercises,
+            {
+                exercise: exercise.type,
+                weight: exercise.weight,
+                id: 1, //hardcoded until DB added
+            },
+        ]);
+        setExercise(newExercise);
+    }
+
+    function validate() {
+        const errors: Errors = {};
+        if (!exercise.type) errors.type = "Please enter a name for the exercise.";
+        if (!exercise.weight) errors.weight = "Please enter a weight for the exercise.";
+        return errors;
+    }
+
     return (
         <>
             <h1> Gymrat</h1>
             <form
                 onSubmit={(event) => {
-                    event.preventDefault();
-                    setExercises([
-                        ...exercises,
-                        {
-                            type: exercise.type,
-                            weight: exercise.weight,
-                            id: 1, //hardcoded until DB added
-                        },
-                    ]);
+                    handleSubmit(event);
                 }}
             >
-                <Input value={exercise.type} onChange={onChange} label="Exercise" id="exercise" type="text" />
+                <Input value={exercise.type} onChange={onChange} label="Exercise" id="type" type="text" />
                 <Input value={exercise.weight} onChange={onChange} label="Weight" id="weight" type="number" />
                 <input type="submit" value="Save Exercise" />
             </form>
@@ -58,8 +79,8 @@ export function App() {
                 <tbody>
                     {exercises.map((exercise) => {
                         return (
-                            <tr key={exercise.type}>
-                                <td>{exercise.type} </td>
+                            <tr key={exercise.exercise}>
+                                <td>{exercise.exercise} </td>
                                 <td>{exercise.weight}</td>
                             </tr>
                         );
