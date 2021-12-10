@@ -2,18 +2,18 @@ import { Input } from "./reusable/Input";
 import { ChangeEvent, useState } from "react";
 
 type NewExercise = {
-    exercise: string;
+    type: string;
     weight: string;
 };
 
 type Exercise = {
     id: number;
-    exercise: string;
+    type: string;
     weight: string;
 };
 
 const newExercise: NewExercise = {
-    exercise: "",
+    type: "",
     weight: "",
 };
 
@@ -37,14 +37,14 @@ export function App() {
                     setExercises([
                         ...exercises,
                         {
-                            exercise: exercise.exercise,
+                            type: exercise.type,
                             weight: exercise.weight,
                             id: 1, //hardcoded until DB added
                         },
                     ]);
                 }}
             >
-                <Input value={exercise.exercise} onChange={onChange} label="Exercise" id="exercise" type="text" />
+                <Input value={exercise.type} onChange={onChange} label="Exercise" id="exercise" type="text" />
                 <Input value={exercise.weight} onChange={onChange} label="Weight" id="weight" type="number" />
                 <input type="submit" value="Save Exercise" />
             </form>
@@ -58,8 +58,8 @@ export function App() {
                 <tbody>
                     {exercises.map((exercise) => {
                         return (
-                            <tr>
-                                <td>{exercise.exercise} </td>
+                            <tr key={exercise.type}>
+                                <td>{exercise.type} </td>
                                 <td>{exercise.weight}</td>
                             </tr>
                         );
