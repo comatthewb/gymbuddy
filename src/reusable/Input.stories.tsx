@@ -1,17 +1,17 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react"
-import { Input } from "./Input"
+import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { Input } from "./Input";
 
 export default {
     title: "Reusable/Input",
-    component: Input
+    component: Input,
 } as ComponentMeta<typeof Input>;
 
 const Template: ComponentStory<typeof Input> = (args) => <Input {...args} />;
 
-export const Demo = Template.bind({})
+export const Demo = Template.bind({});
 
-Demo.args ={
+Demo.args = {
     id: "exercise",
-    label: "exericse", 
-    type: "text"
-}
+    label: "exercise",
+    type: "text",
+};
