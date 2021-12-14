@@ -1,6 +1,8 @@
-it("should support adding an exercise", () => {
-    cy.visit("http://localhost:3000");
+beforeEach(() => {
+    cy.visit("http://localhost:3000/add");
+});
 
+it("should support adding an exercise", () => {
     //should require all fields, so submit the form empty
     cy.findByRole("button", { name: "Save Exercise" }).click();
 
@@ -11,19 +13,12 @@ it("should support adding an exercise", () => {
     cy.findAllByLabelText("Weight").type("5");
     cy.findByRole("button", { name: "Save Exercise" }).click();
 
-    //Now the form should be empty since it was just submitted
-    cy.findByLabelText("Exercise").should("have.value", "");
+    // Confirm saved data displays on home page.
     cy.findByText("Hula hoop");
     cy.findByText("5");
-
-    //The validation messages shold no longer display
-    cy.findByText("Please enter a name for the exercise.").should("not.exist");
-    cy.findByText("Please enter a weight for the exercise.").should("not.exist");
 });
 
 it("should validate onBlur", () => {
-    cy.visit("http://localhost:3000");
-
     //Initially, no validation errors should display
     cy.findByText("Please enter a name for the exercise.").should("not.exist");
     cy.findAllByLabelText("Exercise").focus().blur();

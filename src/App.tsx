@@ -14,6 +14,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<Exercises exercises={exercises} />} />
                 <Route path="/add" element={<AddExercise exercises={exercises} setExercises={setExercises} />} />
+                <Route path="*" element={<h1>Page not found</h1>} />
             </Routes>
         </>
     );

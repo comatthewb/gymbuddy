@@ -3,6 +3,7 @@ import { Input } from "./reusable/Input";
 import { Exercise, FormStatus } from "./types";
 import { newExercise, NewExercise } from "./types";
 import { ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router";
 
 type Errors = Partial<NewExercise>;
 
@@ -14,6 +15,7 @@ type AddExerciseProps = {
 export function AddExercise(props: AddExerciseProps) {
     const [exercise, setExercise] = useState(newExercise);
     const [status, setStatus] = useState<FormStatus>("Idle");
+    const navigate = useNavigate();
 
     function validate() {
         const errors: Errors = {};
@@ -45,7 +47,7 @@ export function AddExercise(props: AddExerciseProps) {
             },
         ]);
         setExercise(newExercise);
-        setStatus("Idle");
+        navigate("/");
     }
 
     const errors = validate();
