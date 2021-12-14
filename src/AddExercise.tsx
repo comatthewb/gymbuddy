@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Input } from "./reusable/Input";
 import { Exercise, FormStatus } from "./types";
-import { newExercise, NewExercise } from "./types";
+import { NewExercise } from "./types";
 import { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
+import { addExercise } from "../src/api/exerciseApi";
 
 type Errors = Partial<NewExercise>;
 
@@ -12,7 +13,12 @@ type AddExerciseProps = {
     setExercises: (exercises: Exercise[]) => void;
 };
 
-export function AddExercise(props: AddExerciseProps) {
+export const newExercise: NewExercise = {
+    type: "",
+    weight: "",
+};
+
+export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
     const [exercise, setExercise] = useState(newExercise);
     const [status, setStatus] = useState<FormStatus>("Idle");
     const navigate = useNavigate();
@@ -34,19 +40,12 @@ export function AddExercise(props: AddExerciseProps) {
             [event.target.id]: event.target.value,
         });
     }
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setStatus("Submitted");
         if (!formIsValid) return;
-        props.setExercises([
-            ...props.exercises,
-            {
-                type: exercise.type,
-                weight: exercise.weight,
-                id: 1, //hardcoded until DB added
-            },
-        ]);
-        setExercise(newExercise);
+        const savedExercise = await addExercise({ type: exercise.type, weight: exercise.weight });
+        setExercises([...exercises, savedExercise]);
         navigate("/");
     }
 

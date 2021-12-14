@@ -8,8 +8,3 @@ export type NewExercise = {
     type: string;
     weight: string;
 };
-
-export const newExercise: NewExercise = {
-    type: "",
-    weight: "",
-};
