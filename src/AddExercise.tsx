@@ -5,6 +5,7 @@ import { NewExercise } from "./types";
 import { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { addExercise } from "../src/api/exerciseApi";
+import { toast } from "react-toastify";
 
 type Errors = Partial<NewExercise>;
 
@@ -46,6 +47,7 @@ export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
         if (!formIsValid) return;
         const savedExercise = await addExercise({ type: exercise.type, weight: exercise.weight });
         setExercises([...exercises, savedExercise]);
+        toast.success("Exercise added.");
         navigate("/");
     }
 

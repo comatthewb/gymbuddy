@@ -1,19 +1,10 @@
 {
-    "exercises": [
-        {
-            "id": 1,
-            "type": "Bench Press",
-            "weight": "150"
-        },
-        {
-            "id": 2,
-            "type": "Hula Hoop",
-            "weight": 1
-        }
-    ],
-    "users": {
-        "id": 1,
-        "email": "co@gmail.com",
-        "password": "123"
+  "exercises": [],
+  "users": [
+    {
+      "id": 1,
+      "email": "c@h.com",
+      "password": "123"
     }
+  ]
 }
