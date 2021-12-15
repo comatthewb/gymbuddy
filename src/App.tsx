@@ -6,6 +6,10 @@ import Navbar from "./Navbar";
 import { Exercise } from "./types";
 import { getExercises } from "../src/api/exerciseApi";
 import { ErrorBoundary } from "react-error-boundary";
+import React from "react";
+
+// Lazy load so these are only loaded in local development
+const DevTools = React.lazy(() => import("./DevTools"));
 
 export function App() {
     const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -29,6 +33,7 @@ export function App() {
 
     return (
         <>
+            {process.env.REACT_APP_SHOW_DEV_TOOLS === "Y" && <DevTools />}
             <Navbar />
             {loadingStatus ? (
                 "page is loading..."

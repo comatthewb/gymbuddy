@@ -1,10 +1,28 @@
 {
-  "exercises": [],
-  "users": [
-    {
-      "id": 1,
-      "email": "c@h.com",
-      "password": "123"
-    }
-  ]
+    "exercises": [
+        {
+            "id": 1,
+            "type": "Bench Press",
+            "weight": "150",
+            "userId": 1
+        },
+        {
+            "id": 2,
+            "type": "Dumbell curls",
+            "weight": "35",
+            "userId": 1
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "email": "c@h.com",
+            "password": "1"
+        },
+        {
+            "id": 2,
+            "email": "no-exercises@nope.com",
+            "password": "1"
+        }
+    ]
 }

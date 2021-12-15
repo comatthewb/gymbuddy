@@ -17,6 +17,7 @@ type AddExerciseProps = {
 export const newExercise: NewExercise = {
     type: "",
     weight: "",
+    userId: 1, // hardcoded
 };
 
 export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
@@ -45,7 +46,11 @@ export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
         event.preventDefault();
         setStatus("Submitted");
         if (!formIsValid) return;
-        const savedExercise = await addExercise({ type: exercise.type, weight: exercise.weight });
+        const savedExercise = await addExercise({
+            type: exercise.type,
+            weight: exercise.weight,
+            userId: 1 /**  hardcoded */,
+        });
         setExercises([...exercises, savedExercise]);
         toast.success("Exercise added.");
         navigate("/");

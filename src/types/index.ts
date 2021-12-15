@@ -7,4 +7,5 @@ export type Exercise = NewExercise & {
 export type NewExercise = {
     type: string;
     weight: string;
+    userId: number;
 };
