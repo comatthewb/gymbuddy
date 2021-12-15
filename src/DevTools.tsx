@@ -3,13 +3,14 @@ import { getUsers } from "./api/userApi";
 import styles from "./DevTools.module.css";
 import { User } from "./types";
 import invariant from "invariant";
+import { useUserContext } from "./UserContext";
 
 type DevToolsProps = {
-    user: User | null;
     setUser: (user: User) => void;
 };
 
-export default function DevTools({ user, setUser }: DevToolsProps) {
+export default function DevTools() {
+    const { user, setUser } = useUserContext();
     const [users, setUsers] = useState<User[]>([]);
     useEffect(() => {
         async function fetchData() {

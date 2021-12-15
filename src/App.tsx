@@ -7,12 +7,19 @@ import { Exercise, User } from "./types";
 import { getExercises } from "../src/api/exerciseApi";
 import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
+import { UserContextProvider } from "./UserContext";
 
 // Lazy load so these are only loaded in local development
 const DevTools = React.lazy(() => import("./DevTools"));
 
+const defaultUser: User = {
+    id: 1,
+    email: "2-exercises@gmail.com",
+    password: "1",
+};
+
 export function App() {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>(defaultUser);
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [loadingStatus, setLoadingStatus] = useState(true);
     const [error, setError] = useState<unknown>(null);
@@ -34,15 +41,14 @@ export function App() {
     if (error) throw error;
 
     return (
-        <>
+        <UserContextProvider user={user} setUser={setUser}>
             {process.env.REACT_APP_SHOW_DEV_TOOLS === "Y" && (
                 <Suspense fallback={<></>}>
-                    <DevTools user={user} setUser={setUser} />
+                    <DevTools />
                 </Suspense>
             )}
-
             <Navbar />
-            {loadingStatus || !user ? (
+            {loadingStatus ? (
                 "page is loading..."
             ) : (
                 <Routes>
@@ -58,13 +64,10 @@ export function App() {
                             </ErrorBoundary>
                         }
                     />
-                    <Route
-                        path="/add"
-                        element={<AddExercise exercises={exercises} setExercises={setExercises} user={user} />}
-                    />
+                    <Route path="/add" element={<AddExercise exercises={exercises} setExercises={setExercises} />} />
                     <Route path="*" element={<h1>Page not found</h1>} />
                 </Routes>
             )}
-        </>
+        </UserContextProvider>
     );
 }

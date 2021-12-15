@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { Input } from "./reusable/Input";
-import { Exercise, FormStatus, User } from "./types";
-import { NewExercise } from "./types";
+import { Exercise, FormStatus, NewExercise } from "./types";
 import { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
 import { addExercise } from "../src/api/exerciseApi";
 import { toast } from "react-toastify";
+import { useUserContext } from "./UserContext";
 
 type Errors = Partial<NewExercise>;
 
 type AddExerciseProps = {
     exercises: Exercise[];
     setExercises: (exercises: Exercise[]) => void;
-    user: User;
 };
 
 function getNewExercise(userId: number) {
@@ -24,9 +23,10 @@ function getNewExercise(userId: number) {
     return newExercise;
 }
 
-export function AddExercise({ exercises, setExercises, user }: AddExerciseProps) {
-    const [exercise, setExercise] = useState(getNewExercise(user.id));
+export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
+    const { user } = useUserContext();
     const [status, setStatus] = useState<FormStatus>("Idle");
+    const [exercise, setExercise] = useState(getNewExercise(user.id));
     const navigate = useNavigate();
 
     function validate() {
