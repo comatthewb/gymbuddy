@@ -42,7 +42,7 @@ export function App() {
             )}
 
             <Navbar />
-            {loadingStatus ? (
+            {loadingStatus || !user ? (
                 "page is loading..."
             ) : (
                 <Routes>
@@ -58,7 +58,10 @@ export function App() {
                             </ErrorBoundary>
                         }
                     />
-                    <Route path="/add" element={<AddExercise exercises={exercises} setExercises={setExercises} />} />
+                    <Route
+                        path="/add"
+                        element={<AddExercise exercises={exercises} setExercises={setExercises} user={user} />}
+                    />
                     <Route path="*" element={<h1>Page not found</h1>} />
                 </Routes>
             )}

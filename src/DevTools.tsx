@@ -25,7 +25,7 @@ export default function DevTools({ user, setUser }: DevToolsProps) {
         }
         fetchData();
     }, [setUser]);
-
+    if (users.length === 0) return null;
     return (
         <section className={styles.root}>
             <label htmlFor="devtools-user"> User </label>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input } from "./reusable/Input";
-import { Exercise, FormStatus } from "./types";
+import { Exercise, FormStatus, User } from "./types";
 import { NewExercise } from "./types";
 import { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router";
@@ -12,16 +12,20 @@ type Errors = Partial<NewExercise>;
 type AddExerciseProps = {
     exercises: Exercise[];
     setExercises: (exercises: Exercise[]) => void;
+    user: User;
 };
 
-export const newExercise: NewExercise = {
-    type: "",
-    weight: "",
-    userId: 1, // hardcoded
-};
+function getNewExercise(userId: number) {
+    const newExercise: NewExercise = {
+        type: "",
+        weight: "",
+        userId: userId, // hardcoded
+    };
+    return newExercise;
+}
 
-export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
-    const [exercise, setExercise] = useState(newExercise);
+export function AddExercise({ exercises, setExercises, user }: AddExerciseProps) {
+    const [exercise, setExercise] = useState(getNewExercise(user.id));
     const [status, setStatus] = useState<FormStatus>("Idle");
     const navigate = useNavigate();
 
@@ -46,11 +50,7 @@ export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
         event.preventDefault();
         setStatus("Submitted");
         if (!formIsValid) return;
-        const savedExercise = await addExercise({
-            type: exercise.type,
-            weight: exercise.weight,
-            userId: 1 /**  hardcoded */,
-        });
+        const savedExercise = await addExercise(exercise);
         setExercises([...exercises, savedExercise]);
         toast.success("Exercise added.");
         navigate("/");

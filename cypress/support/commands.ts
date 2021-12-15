@@ -25,6 +25,6 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import "@testing-library/cypress/add-commands";
 
-Cypress.Commands.add("setUser", (userEmail) => {
+Cypress.Commands.add("setUser", (userEmail: string) => {
     return cy.findByLabelText("User").select(userEmail);
 });
