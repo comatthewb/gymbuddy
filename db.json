@@ -1,39 +1,39 @@
 {
-    "exercises": [
-        {
-            "id": 1,
-            "type": "Bench Press",
-            "weight": "150",
-            "userId": 1
-        },
-        {
-            "id": 2,
-            "type": "Dumbell curls",
-            "weight": "35",
-            "userId": 1
-        },
-        {
-            "id": 3,
-            "type": "Squats",
-            "weight": "235",
-            "userId": 3
-        }
-    ],
-    "users": [
-        {
-            "id": 1,
-            "email": "2-exercises@email.com",
-            "password": "1"
-        },
-        {
-            "id": 2,
-            "email": "0-exercises@nope.com",
-            "password": "1"
-        },
-        {
-            "id": 3,
-            "email": "1-exercise@new.com",
-            "password": "1"
-        }
-    ]
+  "exercises": [
+    {
+      "id": 1,
+      "type": "Bench Press",
+      "weight": "150",
+      "userId": 1
+    },
+    {
+      "id": 2,
+      "type": "Dumbell curls",
+      "weight": "35",
+      "userId": 1
+    },
+    {
+      "id": 3,
+      "type": "Squats",
+      "weight": "235",
+      "userId": 3
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "2-exercises@email.com",
+      "password": "1"
+    },
+    {
+      "id": 2,
+      "email": "0-exercises@nope.com",
+      "password": "1"
+    },
+    {
+      "id": 3,
+      "email": "1-exercise@new.com",
+      "password": "1"
+    }
+  ]
 }

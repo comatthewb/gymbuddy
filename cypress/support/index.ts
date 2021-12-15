@@ -1,3 +1,4 @@
+///<reference types="cypress"/>
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -12,9 +13,18 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
 // Import commands.js using ES2015 syntax:
-import './commands'
-
+import "./commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            /**
+             * Custom command to select a user from dev tools
+             * @example cy.setUser('userEmail@domain.com')
+             */
+            setUser(userEmail: string): Chainable<Element>;
+        }
+    }
+}

@@ -32,16 +32,16 @@ export default function DevTools({ user, setUser }: DevToolsProps) {
             <br />
             <select
                 id="devtools-user"
-                value={user?.id}
+                value={user?.email}
                 onChange={(event) => {
-                    const user = users.find((user) => user.id.toString() === event.target.value);
+                    const user = users.find((user) => user.email === event.target.value);
                     invariant(user !== undefined, "User not found");
                     setUser(user);
                 }}
             >
                 {users.map((user) => {
                     return (
-                        <option key={user.id} value={user.id}>
+                        <option key={user.id} value={user.email}>
                             {user.email}
                         </option>
                     );

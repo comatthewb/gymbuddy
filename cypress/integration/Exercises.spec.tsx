@@ -3,7 +3,8 @@ describe("Exercises", () => {
         cy.visit("http://localhost:3000");
     });
 
-    it.skip("Should display exercises, then support deleting exercises and display the no exercises message", () => {
+    it("Should display the 'no exercises' message when there are no exercises", () => {
+        cy.setUser("0-exercises@nope.com");
         cy.findByText("No exercises exist.");
     });
 });
