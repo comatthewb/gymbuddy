@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AddExercise } from "./AddExercise";
 import { Exercises } from "./Exercises";
 import Navbar from "./Navbar";
-import { Exercise } from "./types";
+import { Exercise, User } from "./types";
 import { getExercises } from "../src/api/exerciseApi";
 import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
@@ -12,6 +12,7 @@ import React from "react";
 const DevTools = React.lazy(() => import("./DevTools"));
 
 export function App() {
+    const [user, setUser] = useState<User | null>(null);
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [loadingStatus, setLoadingStatus] = useState(true);
     const [error, setError] = useState<unknown>(null);
@@ -19,7 +20,8 @@ export function App() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const _exercises = await getExercises();
+                if (!user?.id) return; // If no user is logged in, don't fetch exercises
+                const _exercises = await getExercises(user.id);
                 setExercises(_exercises);
                 setLoadingStatus(false);
             } catch (error) {
@@ -27,13 +29,18 @@ export function App() {
             }
         }
         fetchData();
-    }, []);
+    }, [user?.id]);
 
     if (error) throw error;
 
     return (
         <>
-            {process.env.REACT_APP_SHOW_DEV_TOOLS === "Y" && <DevTools />}
+            {process.env.REACT_APP_SHOW_DEV_TOOLS === "Y" && (
+                <Suspense fallback={<></>}>
+                    <DevTools user={user} setUser={setUser} />
+                </Suspense>
+            )}
+
             <Navbar />
             {loadingStatus ? (
                 "page is loading..."

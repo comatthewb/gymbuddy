@@ -9,3 +9,9 @@ export type NewExercise = {
     weight: string;
     userId: number;
 };
+
+export type User = {
+    id: number;
+    email: string;
+    password: string;
+};

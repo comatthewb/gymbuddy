@@ -53,4 +53,5 @@ export function Exercises({ exercises, setExercises }: ExerciseProps) {
             )}
         </>
     );
+    if (error) throw error;
 }
