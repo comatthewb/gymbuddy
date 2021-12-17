@@ -1,12 +1,6 @@
 {
   "exercises": [
     {
-      "id": 1,
-      "type": "Bench Press",
-      "weight": "150",
-      "userId": 1
-    },
-    {
       "id": 2,
       "type": "Dumbell curls",
       "weight": "35",

@@ -30,7 +30,7 @@ export function AddExercise() {
     const [exercise, setExercise] = useState(getNewExercise(user.id));
     const navigate = useNavigate();
     const exerciseMutation = useMutation(addExercise, {
-        onMutate: async (newExercise) => {
+        onSuccess: async (newExercise) => {
             const existingExercises = queryClient.getQueryData(["exercises", user.id]) as Exercise[];
             queryClient.setQueryData(["exercises", user.id], [...existingExercises, newExercise]);
         },
