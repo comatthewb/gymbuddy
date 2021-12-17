@@ -6,12 +6,12 @@ import { useNavigate } from "react-router";
 import { addExercise } from "../src/api/exerciseApi";
 import { toast } from "react-toastify";
 import { useUserContext } from "./UserContext";
+import { useMutation, useQueryClient } from "react-query";
 
 type Errors = Partial<NewExercise>;
 
 type AddExerciseProps = {
-    exercises: Exercise[];
-    setExercises: (exercises: Exercise[]) => void;
+    // setExercises: (exercises: Exercise[]) => void;
 };
 
 function getNewExercise(userId: number) {
@@ -23,11 +23,18 @@ function getNewExercise(userId: number) {
     return newExercise;
 }
 
-export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
+export function AddExercise() {
+    const queryClient = useQueryClient();
     const { user } = useUserContext();
     const [status, setStatus] = useState<FormStatus>("Idle");
     const [exercise, setExercise] = useState(getNewExercise(user.id));
     const navigate = useNavigate();
+    const exerciseMutation = useMutation(addExercise, {
+        onMutate: async (newExercise) => {
+            const existingExercises = queryClient.getQueryData(["exercises", user.id]) as Exercise[];
+            queryClient.setQueryData(["exercises", user.id], [...existingExercises, newExercise]);
+        },
+    });
 
     function validate() {
         const errors: Errors = {};
@@ -50,8 +57,7 @@ export function AddExercise({ exercises, setExercises }: AddExerciseProps) {
         event.preventDefault();
         setStatus("Submitted");
         if (!formIsValid) return;
-        const savedExercise = await addExercise(exercise);
-        setExercises([...exercises, savedExercise]);
+        exerciseMutation.mutate(exercise);
         toast.success("Exercise added.");
         navigate("/");
     }

@@ -1,21 +1,28 @@
 import { useState } from "react";
+import { useQuery } from "react-query";
 
 import { toast } from "react-toastify";
-import { deleteExercise } from "./api/exerciseApi";
+import { deleteExercise, getExercises } from "./api/exerciseApi";
 import { Exercise } from "./types";
+import { useUserContext } from "./UserContext";
 
 type ExerciseProps = {
     exercises: Exercise[];
-    setExercises: (exercises: Exercise[]) => void;
+    // setExercises: (exercises: Exercise[]) => void;
 };
 
-export function Exercises({ exercises, setExercises }: ExerciseProps) {
+export function Exercises() {
+    const { user } = useUserContext();
+    const exerciseQuery = useQuery<Exercise[]>(["exercises", user.id], () => getExercises(user.id));
     const [error, setError] = useState<unknown>(null);
+
+    if (exerciseQuery.isLoading || !exerciseQuery) return <p>Loading...</p>;
+    if (exerciseQuery.isRefetching) return <p> Checking for fresh data (you're seeing cached data rn)</p>;
     return (
         <>
             <h1> Gymrat</h1>
             <h2> Exercises </h2>
-            {exercises.length ? (
+            {exerciseQuery.data!.length ? (
                 <table>
                     <thead>
                         <tr>
@@ -24,7 +31,7 @@ export function Exercises({ exercises, setExercises }: ExerciseProps) {
                         </tr>
                     </thead>
                     <tbody>
-                        {exercises.map((exercise) => {
+                        {exerciseQuery.data!.map((exercise) => {
                             return (
                                 <tr key={exercise.id}>
                                     <td>{exercise.type} </td>
@@ -33,7 +40,7 @@ export function Exercises({ exercises, setExercises }: ExerciseProps) {
                                         onClick={async () => {
                                             try {
                                                 await deleteExercise(exercise.id);
-                                                setExercises(exercises.filter((e) => e.id !== exercise.id));
+                                                // setExercises(exercises.filter((e) => e.id !== exercise.id));
                                                 toast.success("Exercise deleted.");
                                             } catch (error) {
                                                 setError(error);
@@ -53,5 +60,4 @@ export function Exercises({ exercises, setExercises }: ExerciseProps) {
             )}
         </>
     );
-    if (error) throw error;
 }

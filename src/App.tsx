@@ -8,6 +8,7 @@ import { getExercises } from "../src/api/exerciseApi";
 import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
 import { UserContextProvider } from "./UserContext";
+import { useQuery } from "react-query";
 
 // Lazy load so these are only loaded in local development
 const DevTools = React.lazy(() => import("./DevTools"));
@@ -20,25 +21,24 @@ const defaultUser: User = {
 
 export function App() {
     const [user, setUser] = useState<User>(defaultUser);
-    const [exercises, setExercises] = useState<Exercise[]>([]);
-    const [loadingStatus, setLoadingStatus] = useState(true);
-    const [error, setError] = useState<unknown>(null);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                if (!user?.id) return; // If no user is logged in, don't fetch exercises
-                const _exercises = await getExercises(user.id);
-                setExercises(_exercises);
-                setLoadingStatus(false);
-            } catch (error) {
-                setError(error);
-            }
-        }
-        fetchData();
-    }, [user?.id]);
+    // const [exercises, setExercises] = useState<Exercise[]>([]);
+    // const [loadingStatus, setLoadingStatus] = useState(true);
+    // const [error, setError] = useState<unknown>(null);
 
-    if (error) throw error;
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         try {
+    //             if (!user?.id) return; // If no user is logged in, don't fetch exercises
+    //             const _exercises = await getExercises(user.id);
+    //             setExercises(_exercises);
+    //             setLoadingStatus(false);
+    //         } catch (error) {
+    //             setError(error);
+    //         }
+    //     }
+    //     fetchData();
+    // }, [user?.id]);
 
     return (
         <UserContextProvider user={user} setUser={setUser}>
@@ -48,26 +48,22 @@ export function App() {
                 </Suspense>
             )}
             <Navbar />
-            {loadingStatus ? (
-                "page is loading..."
-            ) : (
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ErrorBoundary
-                                fallbackRender={() => {
-                                    return <p> Sorry, exercises is currently down</p>;
-                                }}
-                            >
-                                <Exercises exercises={exercises} setExercises={setExercises} />
-                            </ErrorBoundary>
-                        }
-                    />
-                    <Route path="/add" element={<AddExercise exercises={exercises} setExercises={setExercises} />} />
-                    <Route path="*" element={<h1>Page not found</h1>} />
-                </Routes>
-            )}
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <ErrorBoundary
+                            fallbackRender={() => {
+                                return <p> Sorry, exercises is currently down</p>;
+                            }}
+                        >
+                            <Exercises />
+                        </ErrorBoundary>
+                    }
+                />
+                <Route path="/add" element={<AddExercise />} />
+                <Route path="*" element={<h1>Page not found</h1>} />
+            </Routes>
         </UserContextProvider>
     );
 }
