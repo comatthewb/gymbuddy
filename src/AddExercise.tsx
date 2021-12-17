@@ -23,7 +23,7 @@ function getNewExercise(userId: number) {
     return newExercise;
 }
 
-export function AddExercise() {
+export default function AddExercise() {
     const queryClient = useQueryClient();
     const { user } = useUserContext();
     const [status, setStatus] = useState<FormStatus>("Idle");

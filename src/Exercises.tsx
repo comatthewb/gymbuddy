@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QueryClient, useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { deleteExercise, getExercises } from "./api/exerciseApi";
 import { Exercise } from "./types";
@@ -10,12 +10,12 @@ type ExerciseProps = {
     // setExercises: (exercises: Exercise[]) => void;
 };
 
-export function Exercises() {
+export default function Exercises() {
     const { user } = useUserContext();
-    const queryClient = new QueryClient();
+    const queryClient = useQueryClient();
     const exerciseQuery = useQuery<Exercise[]>(["exercises", user.id], () => getExercises(user.id));
-    const [error, setError] = useState<unknown>(null);
 
+    const [error, setError] = useState<unknown>(null);
     const exerciseDelete = useMutation(deleteExercise, {
         onSuccess: async (data, exerciseId) => {
             const existingExercises = queryClient.getQueryData(["exercises", user.id]) as Exercise[];
@@ -26,12 +26,13 @@ export function Exercises() {
         },
     });
 
-    if (exerciseQuery.isLoading || !exerciseQuery) return <p>Loading...</p>;
-    if (exerciseQuery.isRefetching) return <p> Checking for fresh data (you're seeing cached data rn)</p>;
+    if (exerciseQuery.isLoading || !exerciseQuery.data) return <p>page is loading...</p>;
+
     return (
         <>
             <h1> Gymrat</h1>
             <h2> Exercises </h2>
+            {exerciseQuery.isRefetching && <p> Checking for fresh data (you're seeing cached data rn</p>}
             {exerciseQuery.data!.length ? (
                 <table>
                     <thead>
@@ -47,7 +48,7 @@ export function Exercises() {
                                     <td>{exercise.type} </td>
                                     <td>{exercise.weight}</td>
                                     <button
-                                        onClick={async () => {
+                                        onClick={async (e) => {
                                             try {
                                                 // await deleteExercise(exercise.id);
                                                 // setExercises(exercises.filter((e) => e.id !== exercise.id));

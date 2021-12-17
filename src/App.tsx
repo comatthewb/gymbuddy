@@ -1,17 +1,15 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { AddExercise } from "./AddExercise";
-import { Exercises } from "./Exercises";
 import Navbar from "./Navbar";
-import { Exercise, User } from "./types";
-import { getExercises } from "../src/api/exerciseApi";
+import { User } from "./types";
 import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
 import { UserContextProvider } from "./UserContext";
-import { useQuery } from "react-query";
 
 // Lazy load so these are only loaded in local development
 const DevTools = React.lazy(() => import("./DevTools"));
+const Exercises = React.lazy(() => import("./Exercises"));
+const AddExercise = React.lazy(() => import("./AddExercise"));
 
 const defaultUser: User = {
     id: 1,
@@ -57,11 +55,20 @@ export function App() {
                                 return <p> Sorry, exercises is currently down</p>;
                             }}
                         >
-                            <Exercises />
+                            <Suspense fallback={<></>}>
+                                <Exercises />
+                            </Suspense>
                         </ErrorBoundary>
                     }
                 />
-                <Route path="/add" element={<AddExercise />} />
+                <Route
+                    path="/add"
+                    element={
+                        <Suspense fallback={<></>}>
+                            <AddExercise />
+                        </Suspense>
+                    }
+                />
                 <Route path="*" element={<h1>Page not found</h1>} />
             </Routes>
         </UserContextProvider>
